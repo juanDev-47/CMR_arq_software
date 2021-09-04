@@ -1,23 +1,38 @@
 import React, { Fragment } from "react";
 
+// Routing
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
 // Layout
 import Header from "./components/layout/Header";
 import Navegacion from "./components/layout/Navegacion";
 
+// componentes
+import Clientes from "./components/clients/Clientes";
+import Productos from "./components/products/Productos";
+import Pedidos from "./components/pedidos/Pedidos";
+
 function App() {
   return (
-    <Fragment>
-      <Header />
+    <Router>
+      <Fragment>
+        <Header />
 
-      <div className="grid contenedor contenido-principal">
-        <Navegacion />
+        <div className="grid contenedor contenido-principal">
+          <Navegacion />
 
-        <main className="caja-contenido col-9">
-          {/* Routing para los diferentes componentes */}
-        </main>
+          <main className="caja-contenido col-9">
+            <Switch>
+              <Route exact path="/" component={Clientes} />
 
-      </div>
-    </Fragment>
+              <Route exact path="/productos" component={Productos} />
+              
+              <Route exact path="/pedidos" component={Pedidos} />
+            </Switch>
+          </main>
+        </div>
+      </Fragment>
+    </Router>
   );
 }
 

@@ -6,4 +6,6 @@ mongoose.connect('mongodb://localhost/restAPI', {
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
+}).then( (response) => {
+    console.log("conectado a la BD");
 });

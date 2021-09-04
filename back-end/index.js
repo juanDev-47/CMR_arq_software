@@ -1,8 +1,11 @@
 const express = require('express');
 const routes = require('./routes');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 require('./config/db');
 require('dotenv').config();
+
+// CORS permite que un cliente se conecte a otro servidor para el intercambio de recursos
+const cors = require('cors');
 
 
 // crear el servidor 
@@ -12,6 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+// Habilitar CORS
+app.use(cors());
 
 // rutas de la app
 app.use('/', routes());
