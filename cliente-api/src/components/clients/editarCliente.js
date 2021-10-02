@@ -28,7 +28,8 @@ const EditarCliente = (props) => {
 
   // useEfect, cuando el componente carga
   useEffect(() => {
-    consultarApi();    
+    consultarApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps    
   },[]);
 
   // leer los datos del formulario
