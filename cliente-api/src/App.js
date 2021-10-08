@@ -15,6 +15,7 @@ import Productos from "./components/products/Productos";
 import Pedidos from "./components/pedidos/Pedidos";
 import EditarProducto from "./components/products/editarProducto";
 import NuevoProducto from "./components/products/nuevoProducto";
+import NuevoPedido from "./components/pedidos/nuevoPedido";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Route exact path="/productos/nuevos" component={NuevoProducto} />
               
               <Route exact path="/pedidos" component={Pedidos} />
+              <Route exact path="/pedidos/nuevo/:id" component={NuevoPedido} />
             </Switch>
           </main>
         </div>

@@ -43,12 +43,18 @@ const Cliente = ({cliente}) => {
                         <p>{telefono}</p>
                     </div>
                     <div className="acciones">
-                        <Link to={`cliente/editar/${_id}`} className="btn btn-azul">
-                            <i className="fas fa-pen-alt"></i>
-                            Editar Cliente
+                        <Link to={`cliente/editar/${_id}`} className="btn btn-amarillo">
+                            <i className="fas fa-pen-alt"/>
+                             Editar Cliente
                         </Link>
+
+                        <Link to={`pedidos/nuevo/${_id}`} className="btn btn-azul">
+                            <i className="fas fa-plus"/>
+                             Editar Producto
+                        </Link>
+
                         <button type="button" className="btn btn-rojo btn-eliminar" onClick={() => eliminarCliente(_id)}>
-                            <i className="fas fa-times"></i>
+                            <i className="fas fa-times"/>
                             Eliminar Cliente
                         </button>
                     </div>

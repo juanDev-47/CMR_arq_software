@@ -2,6 +2,7 @@ import React, {useEffect, useState, Fragment} from 'react';
 import { Link } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import Producto from './producto';
+import Spinner from './../layout/Spinner';
 
 const Productos = () => {
 
@@ -23,9 +24,10 @@ const Productos = () => {
         consultarApi();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+    },[productos]);
 
-
+    // spinner de carga
+        if(!productos.length) return <Spinner/>
 
     return ( 
         <Fragment>

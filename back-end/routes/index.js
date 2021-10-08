@@ -29,6 +29,9 @@ module.exports = function() {
     router.post('/productos',
     productoController.subirArchivo,
     productoController.nuevoProducto);
+    
+    // busqueda de productos
+    router.post('/productos/busqueda/:query', productoController.buscarProducto);
 
     // listar los productos
     router.get('/productos', productoController.mostrarProductos);
@@ -60,6 +63,7 @@ module.exports = function() {
 
     // eliminar pedidos
     router.delete('/pedidos/:id', pedidosController.eliminarPedido);
+
 
     // fin rutas pedidos
 

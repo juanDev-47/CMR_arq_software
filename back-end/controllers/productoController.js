@@ -84,10 +84,13 @@ exports.mostrarProducto = async (req, res, next) => {
 
 // actualizar producto
 exports.actualizarProducto = async (req, res, next) => {
+
+
     try {
         const producto = await Productos.findOneAndUpdate({_id: req.params.id}, req.body, {
             new: true
         });
+            // console.log(producto);
             res.json(producto);
     } catch (error) {
         console.log(error);
@@ -103,5 +106,17 @@ exports.eliminarProducto = async (req, res, next) => {
     } catch (error) {
         console.log(error);
         next();
+    }
+}
+
+exports.buscarProducto = async (req,res,next) => {
+    try {        
+        // obtener el query
+        const { query } = req.params;
+        const producto = await Productos.find({nombre: new RegExp(query, 'i')});
+        res.json(producto);
+    } catch (error) {
+       console.log(error);
+       next(); 
     }
 }
