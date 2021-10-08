@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import clienteAxios from "../../config/axios";
 import Swal from "sweetalert2";
+import { withRouter } from 'react-router-dom';
 
 import FormBuscarProducto from "./FormBuscarProducto";
 import FormCantidadProducto from "./FormCantidadProducto";
@@ -120,6 +121,45 @@ function NuevoPedido(props) {
   }
 
 
+  // almacenar el pedido en la bd
+  const realizarPedido = async e => {
+    e.preventDefault();
+
+    // extraer el ID
+    const { id } = props.match.params;
+
+    // construir el objeto
+    const pedido = {
+      "cliente": id,
+      "pedido": productos,
+      "total": total,
+    }
+
+    // almacenarlo 
+    const resultado = await clienteAxios.post(`/pedidos/nuevo/${id}`, pedido);
+
+    // leer resultado
+    if(resultado.status === 200) {
+      Swal.fire({
+        type: 'success',
+        title: 'Correcto',
+        text: 'se almaceno el pedido correctamente'
+      })
+    } else {
+      // alerta de error
+      Swal.fire({
+        type: 'error',
+        title: 'Error al almacenar',
+        text: resultado.data.mensaje,
+      }) 
+    }
+
+    // redireccionar
+    props.history.push('/pedidos')
+
+  }
+
+
   return (
     <Fragment>
       <div className="ficha-cliente">
@@ -153,12 +193,14 @@ function NuevoPedido(props) {
 
 
        {total > 0 ? (
-         <form>
-           <input type="submit" className="btn btn-verde btn-block" value="Realizar pedido"/>
+         <form 
+          onSubmit={realizarPedido}
+         >
+           <input type="submit" className="btn btn-verde btn-block" value="Realizar pedido" />
          </form>
        ) : null }
     </Fragment>
   );
 }
 
-export default NuevoPedido;
+export default withRouter(NuevoPedido);
