@@ -12,6 +12,7 @@ function NuevoPedido(props) {
   const [cliente, guardarCliente] = useState({});
   const [busqueda, guardarBusqueda] = useState('');
   const [productos, guardarProductos] = useState([]);
+  const [total, guardarTotal] = useState(0);
 
 
   useEffect(() => {
@@ -25,7 +26,11 @@ function NuevoPedido(props) {
 
     // llamar la api
     consultarAPI();
-  }, []);
+
+    // actualizar el total
+    actualizartotal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productos]);
 
 
   const buscarProducto = async e => {
@@ -61,6 +66,59 @@ function NuevoPedido(props) {
     guardarBusqueda(e.target.value);
   }
 
+  // actualizar la cantidad de productos
+  const restarProductos = i => {
+    // copiar el arreglo ariginal
+    const todosProductos = [...productos];
+
+    // validar si esta en cero no puede pedir menos
+    if(todosProductos[i].cantidad === 0) return;
+
+    // decremento 
+    todosProductos[i].cantidad--;
+
+    // almacenarlo
+    guardarProductos(todosProductos);
+    
+  }
+
+  const aumentarProductos = i => {
+    // copiar el arreglo
+    const todosProductos = [...productos];
+
+    // incremento
+    todosProductos[i].cantidad++;
+
+    // almacenarlo
+    guardarProductos(todosProductos);
+    
+  }
+
+  // elimina un producot del state
+  const eliminarProductoPedido = id => {
+    const todosProductos = productos.filter(producto =>  producto.producto !== id);
+
+    guardarProductos(todosProductos);
+  }
+
+  // actualizar el total
+  const actualizartotal = () => {
+    // si el arreglo de productos es igual 0: el total es 0
+    if (productos.length === 0) {
+      guardarTotal(0);
+      return;
+    }
+
+    // calcular el nuevo total
+    let nuevototal = 0;
+
+    // reocrrer todos los productos y las cantidades y precios
+    productos.map(producto => nuevototal += (producto.precio * producto.cantidad));
+
+    // almacenar en el state
+    guardarTotal(nuevototal);
+  }
+
 
   return (
     <Fragment>
@@ -82,22 +140,23 @@ function NuevoPedido(props) {
             <FormCantidadProducto 
                 key={producto.producto}
                 producto={producto}
+                aumentarProductos={aumentarProductos}
+                restarProductos={restarProductos}
+                index={index}
+                eliminarProductoPedido={eliminarProductoPedido}
             />
         ))}
 
       </ul>
-      <div className="campo">
-        <label>Total:</label>
-        <input
-          type="number"
-          name="precio"
-          placeholder="Precio"
-          readOnly="readonly"
-        />
-      </div>
-      <div className="enviar">
-        <input type="submit" className="btn btn-azul" value="Agregar Pedido" />
-      </div>
+       
+       <p className="total">Total a pagar: <span>$ {total}</span> </p>
+
+
+       {total > 0 ? (
+         <form>
+           <input type="submit" className="btn btn-verde btn-block" value="Realizar pedido"/>
+         </form>
+       ) : null }
     </Fragment>
   );
 }
