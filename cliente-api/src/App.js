@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 
 // Routing
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -16,11 +16,20 @@ import Pedidos from "./components/pedidos/Pedidos";
 import EditarProducto from "./components/products/editarProducto";
 import NuevoProducto from "./components/products/nuevoProducto";
 import NuevoPedido from "./components/pedidos/nuevoPedido";
+import Login from "./components/auth/Login";
+
+import { CRMContext, CRMProvider } from './context/CRMContext';
 
 function App() {
+
+  // utilizar context en el componente
+  const [auth, guardarAuth ] = useContext(CRMContext);
+
+
   return (
     <Router>
       <Fragment>
+        <CRMProvider value={[auth, guardarAuth]}>
         <Header />
 
         <div className="grid contenedor contenido-principal">
@@ -28,6 +37,8 @@ function App() {
 
           <main className="caja-contenido col-9">
             <Switch>
+              <Route exact path="/Login" component={Login} />
+
               <Route exact path="/" component={Clientes} />
               <Route exact path="/cliente/nuevo" component={NuevoCliente} />
               <Route exact path="/cliente/editar/:id" component={editarCliente} />
@@ -41,6 +52,7 @@ function App() {
             </Switch>
           </main>
         </div>
+        </CRMProvider>
       </Fragment>
     </Router>
   );

@@ -1,30 +1,48 @@
-import React, {useEffect, useState, Fragment} from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState, Fragment, useContext} from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import Producto from './producto';
 import Spinner from './../layout/Spinner';
 
-const Productos = () => {
+import { CRMContext } from '../../context/CRMContext';
+
+const Productos = (props) => {
 
     // productos = state
     const [productos, guardarProductos] = useState([]);
 
+    const [auth, guardarAuth] = useContext( CRMContext );
+
     // useEffect para consutlar la api
     useEffect(() => {
-
         // query a la api
-        const consultarApi = async () => {
-            const productosConsulta = await clienteAxios.get('/productos');
-            // console.log(productosConsulta.data);
-            guardarProductos(productosConsulta.data);
-            // console.log(productos);
+        if(auth.token !== '') {
+            const consultarApi = async () => {
+                try {
+                    const productosConsulta = await clienteAxios.get('/productos', {
+                        headers: {
+                          Authorization: `Bearer ${auth.token}`,
+                        }
+                      });
+                    
+                    guardarProductos(productosConsulta.data);
+                } catch (error) {
+                    props.history.push('/Login')
+                }
+            }
+    
+            // llamando la api
+            consultarApi();
+        } else {
+            props.history.push('/Login')
         }
-
-        // llamando la api
-        consultarApi();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[productos]);
+
+    if(!auth.auth) {
+        props.history.push('/Login')
+    }
 
     // spinner de carga
         if(!productos.length) return <Spinner/>
@@ -50,4 +68,4 @@ const Productos = () => {
      );
 }
  
-export default Productos;
+export default withRouter(Productos);

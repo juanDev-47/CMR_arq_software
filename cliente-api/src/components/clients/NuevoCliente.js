@@ -1,9 +1,15 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import Swal from 'sweetalert2';
 import {withRouter} from 'react-router-dom';
 import clienteAxion from '../../config/axios'
 
+import { CRMContext } from "../../context/CRMContext";
+
 const NuevoCliente = ({history}) => {
+
+  // utilizar valores del context
+  const [auth, guardarAuth] = useContext(CRMContext);
+
     // cliente = state, guardarcliente = funcion para guardar el state
   const [cliente, guardarCliente] = useState({
     nombre: "",
@@ -67,6 +73,11 @@ const NuevoCliente = ({history}) => {
 
       // return true o false
       return valido;
+  }
+
+  // verificar si esta autenticado 
+  if(!auth.auth) {
+    history.push('/Login');
   }
 
   return (
